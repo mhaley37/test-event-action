@@ -1,7 +1,6 @@
 name: Review workflow
 
 on:
-  pull_request:
   pull_request_review:
 
 jobs:
