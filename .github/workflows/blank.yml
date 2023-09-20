@@ -6,7 +6,7 @@ on:
 jobs:
   echo-stuff:
     name: check event stuff
-    runs-on: ubunut-latest
+    runs-on: ubunutu-latest
     steps:
     - name: do-stuff
       run: |
