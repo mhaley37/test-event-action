@@ -1,0 +1,56 @@
+name: Review workflow
+
+on:
+  pull_request:
+  pull_request_review:
+
+jobs:
+  should-run:
+    name: Check if should run
+    runs-on: ubuntu-latest
+    outputs:
+      should-run: ${{ fromJson(steps.count-approved-reviews.outputs.data).repository.pullRequest.reviews.totalCount >= 3}}
+    steps:
+      - name: setup
+        id: get-repo-name
+        run: echo "name=$(echo ${{ github.repository }} | cut -d '/' -f 2 )" >> "$GITHUB_OUTPUT"
+
+      - uses: octokit/graphql-action@v2.x
+        id: count-approved-reviews
+        with:
+          query: |
+            query($owner:String!,$repo:String!,$number:Int!) {
+              repository(owner:$owner,name: $repo) {
+                pullRequest(number:$number) {
+                  reviews(states:APPROVED) {
+                    totalCount
+                  }
+                }
+              }
+            }         
+          variables: |
+            owner: ${{ github.event.repository.owner.name }}
+            repo: ${{ github.event.repository.name }}
+            number: ${{ github.event.pull_request.number }}    
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN}}
+
+  deploy-to-dev:
+    name: Deploy to dev
+    needs: [should-run]
+    runs-on: ubuntu-latest
+    if: fromJson(needs.should-run.outputs.should-run)
+    steps:
+      - name: echo
+        run: |
+          echo "Deployed to Dev"
+
+  run-e2e-tests:
+    name: Run E2E tests against dev
+    needs: [should-run, deploy-to-dev]
+    runs-on: ubuntu-latest
+    if:  fromJson(needs.should-run.outputs.should-run)
+    steps:
+      - name: echo
+        run: |
+          echo "E2E Tets kicked off"
