@@ -2,7 +2,7 @@ name: Review workflow
 
 on:
   pull_request_review:
-
+    types: [submitted]
 jobs:
   should-run:
     name: Check if should run
