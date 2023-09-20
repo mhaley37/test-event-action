@@ -4,19 +4,15 @@ on:
   pull_request_review:
 
 jobs:
-  echo-stuff:
-    name: check event stuff
-    runs-on: ubunutu-latest
-    steps:
-    - name: do-stuff
-      run: |
-        echo ${{ github.event.pull_request }}
   should-run:
     name: Check if should run
     runs-on: ubuntu-latest
     outputs:
       should-run: ${{ fromJson(steps.count-approved-reviews.outputs.data).repository.pullRequest.reviews.totalCount >= 3}}
     steps:
+      - name: do-stuff
+        run: |
+          echo ${{ github.event.pull_request }}    
       - name: setup
         id: get-repo-name
         run: echo "name=$(echo ${{ github.repository }} | cut -d '/' -f 2 )" >> "$GITHUB_OUTPUT"
