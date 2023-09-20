@@ -4,6 +4,13 @@ on:
   pull_request_review:
 
 jobs:
+  echo-stuff:
+    name: check event stuff
+    runs-on: ubunut-latest
+    steps:
+    - name: do-stuff
+      run: |
+        echo ${{ github.event.pull_request }}
   should-run:
     name: Check if should run
     runs-on: ubuntu-latest
