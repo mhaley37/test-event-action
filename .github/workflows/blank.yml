@@ -1,6 +1,7 @@
 name: Review workflow
 
 on:
+  pull_request:
   pull_request_review:
     types: [submitted]
 jobs:
@@ -20,10 +21,10 @@ jobs:
         id: count-approved-reviews
         with:
           query: |
-            query($owner:String!,$repo:String!,$number:Int!) {
-              repository(owner:$owner,name: $repo) {
-                pullRequest(number:$number) {
-                  reviews(states:APPROVED) {
+            query($owner: String!, $repo: String!, $number: Int!) {
+              repository(owner: $owner, name: $repo) {
+                pullRequest(number: $number) {
+                  reviews(states: APPROVED) {
                     totalCount
                   }
                 }
