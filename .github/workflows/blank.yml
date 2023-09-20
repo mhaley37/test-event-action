@@ -5,6 +5,7 @@ on:
     types: [submitted]
 jobs:
   should-run:
+    if: github.event.review.state == 'approved'
     name: Check if should run
     runs-on: ubuntu-latest
     outputs:
@@ -36,20 +37,20 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN}}
 
   deploy-to-dev:
+    if: fromJson(needs.should-run.outputs.should-run)
     name: Deploy to dev
     needs: [should-run]
     runs-on: ubuntu-latest
-    if: fromJson(needs.should-run.outputs.should-run)
     steps:
       - name: echo
         run: |
           echo "Deployed to Dev"
 
   run-e2e-tests:
+    if:  fromJson(needs.should-run.outputs.should-run)
     name: Run E2E tests against dev
     needs: [should-run, deploy-to-dev]
     runs-on: ubuntu-latest
-    if:  fromJson(needs.should-run.outputs.should-run)
     steps:
       - name: echo
         run: |
