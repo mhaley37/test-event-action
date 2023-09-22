@@ -7,4 +7,5 @@ runs:
     run: |
       echo "${{ vars.MESSAGE }}"
       echo "${{ vars.URL }}"
-      echo "${{ vars.FAKE }}" 
+      echo "${{ vars.FAKE }}"
+    shell: bash
