@@ -1,0 +1,17 @@
+name: Check environment name resolution
+
+on:
+  workflow_dispatch:
+    
+jobs:
+  env-check:
+    environment: ${{ matrix.env }}
+    strategy:
+      fail-fast: false
+      matrix:
+        env: [dev,DEV,qa,Qa]
+    name: ENV check on ${{ matrix.env }} environment
+    runs-on:  ubuntu-latest
+    steps:
+      - name: Get the message
+        run: ${{ vars.MESSAGE }}
