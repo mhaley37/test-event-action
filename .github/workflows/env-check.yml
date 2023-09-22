@@ -7,7 +7,7 @@ jobs:
   env-check:
     environment:
       name: ${{ matrix.env }}
-      url: http://www.mike.com
+      url: ${{ vars.URL }}
     strategy:
       fail-fast: false
       matrix:
@@ -17,3 +17,5 @@ jobs:
     steps:
       - name: Get the message
         run: echo "${{ vars.MESSAGE }}"
+      - name: Get the URL
+        run: echo "${{ vars.URL }}"
