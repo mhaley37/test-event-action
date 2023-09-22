@@ -2,6 +2,7 @@ name: Check environment name resolution
 
 on:
   workflow_dispatch:
+  push:
     
 jobs:
   env-check:
@@ -11,7 +12,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        env: [dev,DEV,qa,Qa]
+        env: [qA,dEv]
     name: ENV check on ${{ matrix.env }} environment
     runs-on:  ubuntu-latest
     steps:
