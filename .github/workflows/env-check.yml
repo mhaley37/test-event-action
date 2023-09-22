@@ -20,3 +20,6 @@ jobs:
         run: echo "${{ vars.MESSAGE }}"
       - name: Get the URL
         run: echo "${{ vars.URL }}"
+      - uses: actions/checkout@v3        
+      - name: Use composite
+        uses: ./.github/actions/composite
