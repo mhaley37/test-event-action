@@ -5,7 +5,9 @@ on:
     
 jobs:
   env-check:
-    environment: ${{ matrix.env }}
+    environment:
+      name: ${{ matrix.env }}
+      url: http://www.mike.com
     strategy:
       fail-fast: false
       matrix:
