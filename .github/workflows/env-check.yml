@@ -16,4 +16,4 @@ jobs:
     runs-on:  ubuntu-latest
     steps:
       - name: Get the message
-        run: ${{ vars.MESSAGE }}
+        run: echo "${{ vars.MESSAGE }}"
