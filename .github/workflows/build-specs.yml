@@ -38,7 +38,7 @@ jobs:
         id: group-files
         run: |
           files=($(find ./e2e/${{ inputs.type }} -iname '*.cy.js' -or -iname '*.cy.ts'))
-          num=$(( ${#files[@]} \ ${{ inputs.type-paralellization }}))
+          num=$(( ${#files[@]} / ${{ inputs.type-paralellization }}))
           suites=()
           index=1
           while [ $index -le ${#files[@]} ] 
