@@ -17,16 +17,15 @@ jobs:
           files=($(find ./e2e/browser -iname '*.cy.js' -or -iname '*.cy.ts'))
           index=1
           while [ $index -le ${#files[@]} ] 
-          do
-            echo "check1 ${files[@]:0:3}"
-            echo "check2 ${files[@]:$index:3}"
-            echo "check3 ${files[@]:$index:3} | sed 's/ /,/g'"
+          do  
             sub_group=$(echo ${files[@]:$index:3} | sed 's/ /,/g')
             echo "Current group is $sub_group"
             suites+=$sub_group
             index=$(( $index + 1 ))
           done
-          echo "groups=$(jq -c -n '$ARGS.positional' --args "${suites[@]}")" >> $GITHUB_OUTPUT 
+          echo "groups=$(jq -c -n '$ARGS.positional' --args "${suites[@]}")" >> $GITHUB_OUTPUT
+      - name: show-output
+        run: The output of groups is ${{ steps.group-files.outputs.groups}}.
 
 
       #TODO: Add more steps to actually get the files correctly.
