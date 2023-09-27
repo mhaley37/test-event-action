@@ -10,8 +10,6 @@ jobs:
       matrix: ${{ steps.group-files.outputs.groups}}
     steps:
       - uses: actions/checkout@v3
-      - name: get-all-browser-specs
-        run: find ./e2e/browser -iname '*.cy.js' -or -iname '*.cy.ts' | paste -sd "," -
       - name: group files
         id: group-files
         run: |
