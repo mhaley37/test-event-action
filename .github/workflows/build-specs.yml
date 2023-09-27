@@ -1,0 +1,22 @@
+name: Build test specs
+on:
+  push:
+
+jobs:
+  build-suites:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: "['\"integration/homepage.cy.js,integration/sidebar.cy.js\"']"
+    steps:
+      - uses: actions/checkout@v3
+      #TODO: Add more steps to actually get the files correctly.
+
+  compile-test-suites:
+    needs: [build-suites]
+    strategy:
+      fail-fast: false
+      matrix:
+        test-spec: ${{ fromJson(needs.build-suites.outputs.matrix) }}   
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Here is the matrix ${{ matrix.test-spec }}"
