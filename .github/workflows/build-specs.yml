@@ -20,7 +20,8 @@ jobs:
           do
             echo "check1 ${files[@]:0:3}"
             echo "check2 ${files[@]:$index:3}"
-            sub_group=${files[@]:$index:3} | sed 's/ /,/g'
+            echo "check3 ${files[@]:$index:3} | sed 's/ /,/g'"
+            sub+group=$(echo ${files[@]:$index:3} | sed 's/ /,/g')
             echo "Current group is $sub_group"
             suites+=sub_group
             index=$(( $index + 1 ))
