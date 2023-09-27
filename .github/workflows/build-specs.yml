@@ -6,9 +6,28 @@ jobs:
   build-suites:
     runs-on: ubuntu-latest
     outputs:
-      matrix: "['\"integration/homepage.cy.js,integration/sidebar.cy.js\"']"
+      #matrix: "['\"integration/homepage.cy.js,integration/sidebar.cy.js\"']"
+      matrix: ${{ steps.group-files.outputs.groups}}
     steps:
       - uses: actions/checkout@v3
+      - name: get-all-browser-specs
+        run: find ./e2e/browser -iname '*.cy.js' -or -iname '*.cy.ts' | paste -sd "," -
+      - name: group files
+        id: group-files
+        run: |
+          suites=()
+          files=($(find ./e2e/browser -iname '*.cy.js' -or -iname '*.cy.ts'))
+          index=1
+          while [ $index -le ${#files[@]} ] 
+          do
+            sub_group=${files[@]:index:3} | sed 's/ /,/g'
+            echo "Current group is $sub_group"
+            suites+=sub_group
+            index=$(( $index + 1 ))
+          done
+          echo "groups=$(jq -c -n '$ARGS.positional' --args "${suites[@]}")" >> $GITHUB_OUTPUT 
+
+
       #TODO: Add more steps to actually get the files correctly.
 
   compile-test-suites:
