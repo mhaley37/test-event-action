@@ -23,7 +23,7 @@ jobs:
             echo "check3 ${files[@]:$index:3} | sed 's/ /,/g'"
             sub_group=$(echo ${files[@]:$index:3} | sed 's/ /,/g')
             echo "Current group is $sub_group"
-            suites+=sub_group
+            suites+=$sub_group
             index=$(( $index + 1 ))
           done
           echo "groups=$(jq -c -n '$ARGS.positional' --args "${suites[@]}")" >> $GITHUB_OUTPUT 
