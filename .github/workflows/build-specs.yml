@@ -24,11 +24,6 @@ jobs:
             index=$(( $index + 1 ))
           done
           echo "groups=$(jq -c -n '$ARGS.positional' --args "${suites[@]}")" >> $GITHUB_OUTPUT
-      - name: show-output
-        run: The output of groups is ${{ steps.group-files.outputs.groups}}.
-
-
-      #TODO: Add more steps to actually get the files correctly.
 
   compile-test-suites:
     needs: [build-suites]
