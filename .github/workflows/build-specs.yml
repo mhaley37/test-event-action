@@ -1,27 +1,52 @@
 name: Build test specs
 on:
-  push:
+  workflow_dispatch: 
+    inputs:
+      browser-name:
+        description: 'Name of browser to run tests'
+        required: false
+        default: edge
+      remote-env-name:
+        # A DI environment, dev, qa, sandbox, prod
+        default: dev
+        description: The environment to test
+        required: false
+      test-spec:
+        description: Test spec string to use
+        required: false
+      type:
+        # expects "browser" or "integration"
+        default: browser
+        description: 'Type of tests to run'
+        required: false
+      type-paralellization:
+        default: "1"
+        description: How many paralell jobs to split test specs of the type into
+        required: false
+      use-remote-env:
+        default: 'true'
+        description: If true then run against a DI environment, else against local
 
 jobs:
   build-suites:
     runs-on: ubuntu-latest
     outputs:
-      #matrix: "['\"integration/homepage.cy.js,integration/sidebar.cy.js\"']"
       matrix: ${{ steps.group-files.outputs.groups}}
     steps:
       - uses: actions/checkout@v3
       - name: group files
         id: group-files
         run: |
+          files=($(find ./e2e/${{ inputs.type }} -iname '*.cy.js' -or -iname '*.cy.ts'))
+          num=$(( ${#files[@]} \ ${{ inputs.type-paralellization }}))
           suites=()
-          files=($(find ./e2e/browser -iname '*.cy.js' -or -iname '*.cy.ts'))
           index=1
           while [ $index -le ${#files[@]} ] 
           do  
-            sub_group=$(echo ${files[@]:$index:3} | sed 's/ /,/g')
+            sub_group=$(echo ${files[@]:$index:$num} | sed 's/ /,/g')
             echo "Current group is $sub_group"
             suites+=($sub_group)
-            index=$(( $index + 3 ))
+            index=$(( $index + $num ))
           done
           echo "groups=$(jq -c -n '$ARGS.positional' --args "${suites[@]}")" >> $GITHUB_OUTPUT
 
