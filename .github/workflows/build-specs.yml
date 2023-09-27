@@ -20,7 +20,7 @@ jobs:
           index=1
           while [ $index -le ${#files[@]} ] 
           do
-            sub_group=${files[@]:index:3} | sed 's/ /,/g'
+            sub_group=${files[@]:$index:3} | sed 's/ /,/g'
             echo "Current group is $sub_group"
             suites+=sub_group
             index=$(( $index + 1 ))
